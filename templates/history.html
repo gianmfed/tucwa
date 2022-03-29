@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+
+{% block title %}
+	TUCWA History
+{% endblock %}
+
+{% block nav %}
+	<li class="nav-item">
+		<a class="nav-link" href="/">Today</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link active" href="/history">History</a>
+	</li>
+{% endblock %}
+
+{% block main %}
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<form class="pb-2" action="/history" method="post">
+		<div class="row align-items-center">
+			<div class="col">
+				<label for="drange">Time range</label>
+			</div>
+			<div class="col">
+				<input type="range" class="form-range" name="drange" min="1" max="{{ nentries }}" value="1">
+			</div>
+			<div class="col">
+				<input type="submit" class="btn btn-primary" value="Show">
+			</div>
+		</div>
+	</form>
+
+	<!-- Chart.js -->
+	<canvas class="mx-5" id="myChart" style="width:100%;background-color:aliceblue"></canvas>
+	<script>
+		// Import minutes
+		minutes = [
+			{% for i in history %}
+			{{ i[1] }}/60,
+			{% endfor %}
+		]
+
+		// Import dates
+		const dates = [
+			{% for j in history %}
+			"{{ j[0] }}",
+			{% endfor %}
+		];
+
+		const data = {
+			labels: dates,
+			datasets: [{
+				label: 'Minutes of pc usage',
+				backgroundColor: 'rgb(102, 51, 0)',
+				borderColor: 'rgb(204, 153, 0)',
+				data: minutes,
+  			}]
+		};
+
+		const config = {
+			type: 'line',
+			data: data,
+			options: {
+				animations: {
+      				tension: {
+        				duration: 2000,
+        				easing: 'linear',
+						from: 1,
+						to: 0,
+						loop: true
+      				}
+				}
+			}
+		};
+
+		const myChart = new Chart(
+			document.getElementById('myChart'),
+			config
+		);
+	</script>
+
+{% endblock %}
