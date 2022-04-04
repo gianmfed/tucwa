@@ -9,13 +9,18 @@ from sqlite3 import connect
 con = connect('time.db')
 db = con.cursor()
 
-tutto = db.execute('SELECT * FROM time_table ORDER BY date DESC LIMIT 7')
-listadate = tutto.fetchall()
+last_seven_day = db.execute('SELECT * FROM time_table ORDER BY date DESC LIMIT 7')
+listadate = last_seven_day.fetchall()
 
-print(listadate[0])
+print(f'\nOggi: {listadate[0][1] // 60} minuti\n')
 
+print('Ultima settimana:')
+sum_average = 0
 for data in listadate:
-    print(data[1] // 60)
+    sum_average += data[1] // 60
+    print(f'Giorno: {data[0]}, {data[1] // 60} minuti')
+
+print(f'\nMedia: {sum_average // 7} minuti al giorno\n')
 
 con.close()
 
