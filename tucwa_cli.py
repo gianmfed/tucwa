@@ -21,6 +21,7 @@ for data in listadate:
     print(f'Giorno: {data[0]}, {data[1] // 60} minuti')
 
 print(f'\nMedia: {sum_average // 7} minuti al giorno\n')
+input()
 
 con.close()
 
